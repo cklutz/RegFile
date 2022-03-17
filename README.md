@@ -33,4 +33,4 @@ using (var writer = new RegFileWriter("somefile.reg"))
 
 ## Builds
 
-[![Windows](https://github.com/cklutz/Cklutz.RegFile/workflows/Windows/badge.svg)](https://github.com/cklutz/Cklutz.RegFile/actions?query=workflow%3AWindows)
+[![Windows](https://github.com/cklutz/RegFile/workflows/Windows/badge.svg)](https://github.com/cklutz/RegFile/actions?query=workflow%3AWindows)
