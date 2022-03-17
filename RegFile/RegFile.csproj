@@ -11,14 +11,14 @@
     </Description>
     <InformationalVersion>$(Version).0</InformationalVersion>
     <FileVersion>$(Version).0</FileVersion>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <RepositoryUrl>https://github.com/cklutz/RegFile</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\LICENSE" Pack="true" PackagePath="\" />
+    <None Include="LICENSE.txt" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
