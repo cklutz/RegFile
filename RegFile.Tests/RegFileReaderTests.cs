@@ -19,7 +19,7 @@ Windows Registry Editor Version 5.00
 ""qword_value""=hex(b):01,00,00,00,00,00,00,00
 ""qword_value_max""=hex(b):FF,FF,FF,FF,FF,FF,FF,7F
 ""string_value""=""Hello World""
-""string_value_escape""=""Hello\\t\\n\\r\\""World\\""""
+""string_value_escape""=""Hello\t\n\r\""World\""""
 ""string_value_empty""=""""
 ""binary_value""=hex:01,00,00
 ""expand_string_value""=hex(2):25,00,53,00,79,00,73,00,74,00,65,00,6D,00,52,00,6F,00,6F,00,74,00,25,00,5C,00,73,00,79,00,73,\

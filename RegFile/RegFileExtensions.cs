@@ -83,12 +83,75 @@ namespace RegFile
 
         public static string Unescape(string str)
         {
-            return str.Replace(@"\\", @"\");
+            var sb = new StringBuilder();
+            int v = 0;
+            for (int i = 0; i < str.Length; i++, v++)
+            {
+                if (str[i] == '\\')
+                {
+                    i++;
+                    if (i > str.Length - 1)
+                    {
+                        break;
+                    }
+
+                    switch (str[i])
+                    {
+                        case 'n':
+                            sb.Append('\n');
+                            break;
+                        case 'r':
+                            sb.Append('\r');
+                            break;
+                        case 't':
+                            sb.Append('\t');
+                            break;
+                        case '"':
+                            sb.Append(str[i]);
+                            break;
+                        default:
+                            sb.Append(str[i]);
+                            break;
+                    }
+                }
+                else
+                {
+                    sb.Append(str[i]);
+                }
+            }
+
+            return sb.ToString();
         }
 
         public static string Escape(string str)
         {
-            return str.Replace(@"\", @"\\");
+            var sb = new StringBuilder();
+            for (int i = 0; i < str.Length; i++)
+            {
+                switch (str[i])
+                {
+                    case '\r':
+                        sb.Append("\\r");
+                        break;
+                    case '\n':
+                        sb.Append("\\n");
+                        break;
+                    case '\t':
+                        sb.Append("\\t");
+                        break;
+                    case '\"':
+                        sb.Append("\\\"");
+                        break;
+                    case '\\':
+                        sb.Append("\\");
+                        break;
+                    default:
+                        sb.Append(str[i]);
+                        break;
+                }
+            }
+
+            return sb.ToString();
         }
 
         public static RegValueInfo GetValueInfo(string buf/*ReadOnlySpan<char> buf*/)
@@ -209,6 +272,28 @@ namespace RegFile
                 sb.Append("00");
             }
 
+        }
+
+        public static RegistryValueFormat DeduceValueFormat(this RegistryValueKind kind, object value)
+        {
+            switch (kind)
+            {
+                case RegistryValueKind.None:
+                    return RegistryValueFormat.HexValues;
+                case RegistryValueKind.String:
+                    return RegistryValueFormat.String; // could also be "HexValues"
+                case RegistryValueKind.Binary:
+                    return RegistryValueFormat.HexValues;
+                case RegistryValueKind.DWord:
+                    return RegistryValueFormat.Integer; // could also be "HexValuesLE"
+                case RegistryValueKind.MultiString:
+                case RegistryValueKind.ExpandString:
+                    return RegistryValueFormat.Utf16LEHexValues;
+                case RegistryValueKind.QWord:
+                    return RegistryValueFormat.HexValuesLE;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(kind), kind, null);
+            }
         }
 
         public static string GetRegFileValue(this RegValueInfo valueInfo, object value)
