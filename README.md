@@ -1,11 +1,21 @@
 # RegFile
 
-A .NET library that can be used to read `.reg` files. The resulting list of "commands"
-can then be used to apply them to a live registry or dump them back into a `.reg` file.
+A .NET library that can be used to read and write `.reg` files, and import into or export from
+the Windows Registry.
+
+Putting the functionality together, one can recreate the `REG.EXE IMPORT` and `REG.EXE EXPORT` commands easily.
+
+## Current Limitations
+
+In short all native registry types (and formats) that are represented by the `RegistryValueKind`-type are supported.
+As file format, currently only the `Windows Registry Editor Version 5.00` signature is supported (which is the
+current format since Windows 2000). The older `REGEDIT4` format is not currently supported.
+
+Also, please refer to `RegFileReaderTests.cs` for currently supported data types and `.reg` file formats.
 
 ## Example Usage
 
-Reading a `.reg` file:
+### Reading a `.reg` file
 
 ```csharp
 IEnumerable<RegistrySubKeyCommand> commands;
@@ -15,20 +25,27 @@ using (var reader = new RegFileReader(fileName))
 }
 ```
 
-Applying commands to the Windows Registry:
-
-```csharp
-var processor = new RegCommandProcessor(RegistryView.Default);
-processor.Process(commands);
-```
-
-Writing commands back to a `.reg` file:
+### Writing a `.reg` file
 
 ```csharp
 using (var writer = new RegFileWriter("somefile.reg"))
 {
     writer.Write(commands);
 }
+```
+
+### Applying commands to the Windows Registry
+
+```csharp
+var processor = new RegCommandProcessor(RegistryView.Default);
+processor.Process(commands);
+```
+
+### Extracing commands from the Windows Registry
+
+```csharp
+var extractor = new RegCommandExtractor(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\.NETFramework", RegistryView.Registry64);
+var commands = extractor.Extract();
 ```
 
 ## Builds
