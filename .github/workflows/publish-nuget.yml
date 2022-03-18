@@ -17,19 +17,28 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 6.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
+      - name: Test
+        run: dotnet test --no-build --verbosity normal          
+      - name: Publish package to NuGet
+        run: dotnet nuget push Cklutz.RegFile*.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+
 
       # Publish
-      - name: publish on version change
-        id: publish_nuget
-        # Not using this, but fork below for this reason: https://github.com/brandedoutcast/publish-nuget/issues/76
-        # uses: rohith/publish-nuget@v2
-        uses: alirezanet/publish-nuget@v3.0.1
-        with:
+      #- name: publish on version change
+       # id: publish_nuget
+        # Note: this will produce a "bogus" error message, see https://github.com/brandedoutcast/publish-nuget/issues/76 for details.
+        # However, package will be published regardless.
+        #uses: rohith/publish-nuget@v2
+        #with:
           # Filepath of the project to be packaged, relative to root of repository.
-          PROJECT_FILE_PATH: RegFile/RegFile.csproj
+         # PROJECT_FILE_PATH: RegFile/RegFile.csproj
           
           # NuGet package id, used for version detection & defaults to project name
-          PACKAGE_NAME: Cklutz.RegFile
+          #PACKAGE_NAME: Cklutz.RegFile
           
           # Filepath with version info, relative to root of repository & defaults to PROJECT_FILE_PATH
           # VERSION_FILE_PATH: Directory.Build.props
@@ -47,7 +56,7 @@ jobs:
           # TAG_FORMAT: v*
 
           # API key to authenticate with NuGet server
-          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+          #NUGET_KEY: ${{secrets.NUGET_API_KEY}}
 
           # NuGet server uri hosting the packages, defaults to https://api.nuget.org
           # NUGET_SOURCE: https://api.nuget.org
